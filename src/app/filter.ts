@@ -1,27 +1,40 @@
 export class Filter {
-  hideFlasks = true;
-  hideFlasksType = FlaskType.All;
+  hideLifeFlasks = true;
+  hideLifeFlasksQuality: number | null = 10;
+  hideLifeFlasksBaseTypeExceptions = ['Ultimate Life Flask'];
+  hideManaFlasks = true;
+  hideManaFlasksQuality: number | null = null;
+  hideManaFlasksBaseTypeExceptions = ['None'];
+  hideCharms = true;
+  hideCharmsQuality: number | null = 0;
+  hideCharmsBaseTypeExceptions = ['Thawing Charm', 'Amethyst Charm', 'Golden Charm'];
   hideScrolls = true;
-  hideJewellery = true;
-  hideJewelleryOfRarity = RarityToHide.Normal;
+  hideRings = true;
+  hideRingsOfRarity = RarityToHide.Normal;
+  hideRingsBaseTypeExceptions = ['Gold Ring', 'Prismatic Ring', 'Amethyst Ring'];
+  hideAmulets = true;
+  hideAmuletsOfRarity = RarityToHide.Normal;
+  hideAmuletsBaseTypeExceptions = ['Gold Amulet', 'Stellar Amulet'];
+  hideBelts = true;
+  hideBeltsOfRarity = RarityToHide.Normal;
+  hideBeltsBaseTypeExceptions = ['Golden Obi', 'Utility Belt'];
   hideNormalAndMagicItems = true;
-  hideNormalAndMagicItemsOfRarity = RarityToHide.NormalAndMagic;
+  hideNormalAndMagicItemsOfRarity = WeaponsAndArmourRarityToHide.NormalAndMagic;
+  showSocketedItems = true;
+  showSocketedItemsType = SocketedItemType.TwoOrMoreSockets;
+  showQualityItems = true;
+  showQualityItemsType = QualityItemType.MinimumTenQuality;
+
   hideGold = true;
   hideGoldLowerThan = 50;
-  hideCommonCharms = true;
   hideRunes = false;
-  hideCommonCurrency = false;
-  hideCommonCurrencyType = CurrencyToHide.ShardsOnly;
-
-  showSocketedItems = true;
-  showSocketedItemsType = SocketedItemType.All;
-  showQualityItems = true;
-  showQualityItemsType = QualityItemType.All;
-  showUltimateLifeFlasks = true;
-  showUltimateLifeFlasksMinQuality = 10;
+  hideRunesExceptions = ['None'];
+  hideCurrency = true;
+  hideCurrencyTypes = ['Transmutation Shard', 'Artificer\'s Shard'];
 
   highlightUniques = true;
   highlightRareJewellery = true;
+  highlightChanceBases = true;
 
   weaponFilters: WeaponFilter[] = [];
 
@@ -54,10 +67,113 @@ export class Filter {
   dynamicSkillGemsLevel: number | null = null;
 
   cosmeticTopCurrencyLabels = false;
-  cosmeticTopCurrencyAlertSounds = false;
+  cosmeticRemoveAllHighlights = false;
+  cosmeticRemoveAllMinimapIcons = false;
+  cosmeticTopCurrencyAlertSounds = true;
 
-  customRulesTop: string | null = null;
-  customRulesBottom: string | null = null;
+  customCosmeticRules: CustomRule[] = [];
+
+  customRules: CustomRule[] = [];
+
+  freeRulesTop: string | null = null;
+  freeRulesBottom: string | null = null;
+}
+
+export class CustomRule {
+  active = true;
+  itemClass: string = 'All';
+  itemType: string = 'All';
+  baseTypes: string[] = ['All'];
+  rarityComparator: Comparator = Comparator.GreaterThanOrEqual;
+  rarity: Rarity = Rarity.Normal;
+  displayType = DisplayType.Show;
+  cosmeticOptions: CosmeticOptions | null = null;
+  continue = false;
+}
+
+export class CosmeticOptions {
+  minimapIcon = false;
+  minimapIconSize = MinimapIconSize.Small;
+  minimapIconColor = Color.White;
+  minimapIconShape = MinimapIconShape.Circle;
+
+  playEffect = false;
+  playEffectColor: Color = Color.White;
+  playEffectTemp = false;
+
+  labelStyle = false;
+  backgroundColor: string | null = null;
+  borderColor: string | null = null;
+  textColor: string | null = null;
+  fontSize: number | null = null;
+}
+
+export enum Comparator {
+  GreaterThanOrEqual = '>=',
+  LessThanOrEqual = '<=',
+  Equal = '==',
+}
+
+export enum MinimapIconSize {
+  Large = 0,
+  Medium = 1,
+  Small = 2,
+}
+
+export enum LabelSize {
+  Smallest = 21,
+  Smaller = 25,
+  Small = 29,
+  Normal = 33,
+  Large = 37,
+  Larger = 41,
+  Largest = 45,
+}
+
+export enum MinimapIconShape {
+  Circle = 'Circle',
+  Diamond = 'Diamond',
+  Hexagon = 'Hexagon',
+  Square = 'Square',
+  Star = 'Star',
+  Triangle = 'Triangle',
+  Cross = 'Cross',
+  Moon = 'Moon',
+  Raindrop = 'Raindrop',
+  Kite = 'Kite',
+  Pentagon = 'Pentagon',
+  UpsideDownHouse = 'UpsideDownHouse',
+}
+
+export enum Color {
+  Red = 'Red',
+  Green = 'Green',
+  Blue = 'Blue',
+  Brown = 'Brown',
+  White = 'White',
+  Yellow = 'Yellow',
+  Cyan = 'Cyan',
+  Grey = 'Grey',
+  Orange = 'Orange',
+  Pink = 'Pink',
+  Purple = 'Purple',
+}
+
+export enum Rarity {
+  Normal = 'Normal',
+  Magic = 'Magic',
+  Rare = 'Rare',
+  Unique = 'Unique',
+}
+
+export enum DisplayType {
+  Hide = 'Hide',
+  Show = 'Show',
+  White = 'White',
+  Yellow = 'Yellow',
+  Orange = 'Orange',
+  Brown = 'Brown',
+  Purple = 'Purple',
 }
 
 export class WeaponFilter {
@@ -69,7 +185,7 @@ export class WeaponFilter {
 
 export class ArmourFilter {
   show = true;
-  armourType = ArmourType.All;
+  armourType = ArmourType.AllButShields;
   rarity = MinimumRarity.Normal;
   baseTypeTier = BaseTypeTier.ExpertOnly;
   defenceType = DefenceType.All;
@@ -92,10 +208,12 @@ export enum WeaponType {
 
 export enum ArmourType {
   All = "All",
-  BodyArmour = "Body Armour",
-  Helmet = "Helmet",
+  AllButShields = "AllButShields",
+  BodyArmours = "Body Armours",
+  Helmet = "Helmets",
   Gloves = "Gloves",
   Boots = "Boots",
+  Shields = "Shields",
 }
 
 export enum DefenceType {
@@ -109,6 +227,7 @@ export enum DefenceType {
 }
 
 export enum MinimumRarity {
+  Rare = "Rare",
   Magic = "Magic",
   Normal = "Normal",
 }
@@ -139,7 +258,16 @@ export enum RarityToHide {
   NormalAndMagic = "NormalAndMagic",
 }
 
+export enum WeaponsAndArmourRarityToHide {
+  Normal = "Normal",
+  NormalAndMagic = "NormalAndMagic",
+  NormalMagicRareBelowAdvanced = "NormalMagicRareBelowAdvanced",
+  NormalMagicRareBelowExpert = "NormalMagicRareBelowExpert",
+  NormalMagicRare = "NormalMagicRare",
+}
+
 export enum CurrencyToHide {
+  CommonShardsOnly = "CommonShardsOnly",
   ShardsOnly = "ShardsOnly",
   AllCommon = "AllCommon",
 }
